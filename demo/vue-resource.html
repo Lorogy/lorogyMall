@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="../node_modules/vue/dist/vue.js"></script>
+  <script src="../node_modules/vue-resource/dist/vue-resource.js"></script>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+  <div id="app" class="container">
+    <h1>vue-resource插件讲解</h1>
+    <a href="javascript:;" class="btn btn-primary" v-on:click="get">GET请求</a>
+    <a href="javascript:;" class="btn btn-primary" @click="post">POST请求</a>
+    <a href="javascript:;" class="btn btn-primary" @click="jsonp">JSONP请求</a>
+    <a href="javascript:;" class="btn btn-primary" @click="http">http</a>
+
+    <p>{{msg}}</p>
+  </div>
+  <script>
+    new Vue({
+      el:"#app",
+      data:{
+        msg:''
+      },
+      //针对所有请求，全局loading处理
+      mounted:function(){
+        Vue.http.interceptors.push(function(request,next){
+          console.log('req init')//请求前处理
+          next(function(response){
+            console.log('res init')//请求后处理
+            return response
+          })
+        })
+      },
+      http:{
+        //全局路径配置
+        root:"file:///G:/Lorogy/web-learning/vue/lorogyMall/"
+      },
+      methods:{
+        get:function(){
+          this.$http.get("package.json",{
+            params:{
+              userId:"101"
+            },
+            headers:{
+              token:"abcd"
+            }
+          }).then(res=>{
+            this.msg=res.data
+          },error=>{
+            this.msg=error
+          })
+        },
+        post:function(){
+          this.$http.post("package.json",{
+            userId:"102"
+          },{
+            headers:{
+              access_token:"abcde"
+            }
+          }).then(res=>{
+            this.msg=res.data
+          },error=>{
+            this.msg=error
+          })
+        },
+        jsonp:function(){
+          this.$http.jsonp("package.json").then(res=>{
+            this.msg=res.data
+          },error=>{
+            this.msg=error
+          })
+        },
+        //另一种请求方式
+        http:function(){
+          this.$http({
+            url:"package.json",
+            params:{
+              userId:"104"
+            },
+            headers:{
+              token:"123"
+            },
+            timeout:5,
+            before:function(){
+              console.log('before init')
+            }
+          }).then(res=>{
+            this.msg=res.data
+          },error=>{
+            this.msg=error
+          })
+        }
+      }
+    })
+  </script>
+</body>
+</html>
