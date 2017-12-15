@@ -4,15 +4,14 @@
   <meta charset="UTF-8">
   <title>Document</title>
   <script src="../node_modules/vue/dist/vue.js"></script>
-  <script src="../node_modules/vue-resource/dist/vue-resource.js"></script>
+  <script src="../node_modules/axios/dist/axios.js"></script>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
   <div id="app" class="container">
-    <h1>vue-resource插件讲解</h1>
+    <h1>axios插件讲解</h1>
     <a href="javascript:;" class="btn btn-primary" v-on:click="get">GET请求</a>
     <a href="javascript:;" class="btn btn-primary" @click="post">POST请求</a>
-    <a href="javascript:;" class="btn btn-primary" @click="jsonp">JSONP请求</a>
     <a href="javascript:;" class="btn btn-primary" @click="http">http</a>
 
     <p>{{msg}}</p>
@@ -23,73 +22,63 @@
       data:{
         msg:''
       },
-      //全局拦截——针对所有请求，全局loading处理
+      //全局拦截——针对所有请求，全局loading处理，拦截请求
       mounted:function(){
-        Vue.http.interceptors.push(function(request,next){
-          console.log('req init')//请求前处理
-          next(function(response){
-            console.log('res init')//请求后处理
-            return response
-          })
+        axios.interceptors.request.use(function(config){
+          console.log('req init')
+          return config
+        })
+        axios.interceptors.request.use(function(response){
+          console.log('res init')
+          return response
         })
       },
-      /*http:{
-        //全局路径配置
-        root:"http://localhost:8088/lorogyMall/"
-      },*/
       methods:{
         get:function(){
-          this.$http.get("package.json",{
+          axios.get("../package.json",{
             params:{
-              userId:"101"
+              userId:"1"
             },
             headers:{
-              token:"abcd"
+              token:"lorogy"
             }
           }).then(res=>{
             this.msg=res.data
-          },error=>{
-            this.msg=error
+          }).catch(function(error){
+            console.log('error')
           })
         },
         post:function(){
-          this.$http.post("package.json",{
-            userId:"102"
-          },{
+          axios.post("../package.json",{userId:"2"},{
             headers:{
-              access_token:"abcde"
+              token:"sophia"
             }
           }).then(res=>{
             this.msg=res.data
-          },error=>{
-            this.msg=error
-          })
-        },
-        jsonp:function(){
-          this.$http.jsonp("package.json").then(res=>{
-            this.msg=res.data
-          },error=>{
-            this.msg=error
+          }).catch(function(error){
+            console.log('error')
           })
         },
         //另一种请求方式
+        //post时 data
+        //get时 params
         http:function(){
-          this.$http({
-            url:"package.json",
+          axios({
+            url:"../package.json",
+            method:"get",
+            data:{
+              userId:"3"
+            },
             params:{
-              userId:"104"
+              userId:"4"
             },
             headers:{
-              token:"123"
-            },
-            timeout:10,
-            before:function(){
-              console.log('before init')
+              token:"angle"
             }
           }).then(res=>{
             this.msg=res.data
-          },error=>{
-            this.msg=error
+          }).catch(function(error){
+            console.log('error')
           })
         }
       }
