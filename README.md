@@ -19,9 +19,8 @@ npm run build
 npm run build --report
 ```
 
-##项目文件修改内容
-
-#build/webpack.dev.conf.js
+## 项目文件修改内容
+### build/webpack.dev.conf.js
 模拟加载后台数据
 添加：
 ```
@@ -40,8 +39,7 @@ const goodsData=require('./../mock/goods.json')
       app.use(router)
     }
 ```
-
-#config/index.js
+### config/index.js
 运行时自动打开浏览器
 ```
 autoOpenBrowser: true,
@@ -50,18 +48,13 @@ autoOpenBrowser: true,
 ```
 assetsPublicPath: 'http://www.lorogy.com/lorogymail',
 ```
-
-#mock
+### mock
 模拟json数据
-
-#static
+### static
 大资源，需要请求
-
-#src/assets
+### src/assets
 小资源，直接用于组件
-
-#src/components
+### src/components
 可复用的组件.vue
-
-#src/views
+### src/views
 界面模板
