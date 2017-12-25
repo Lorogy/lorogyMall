@@ -39,6 +39,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     watchOptions: {
       poll: config.dev.poll,
     },
+    //模拟加载后台数据
     before(router){
       router.get('/goods',(req,res)=>{
         res.json(goodsData)

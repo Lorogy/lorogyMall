@@ -1,6 +1,7 @@
 # lorogymall
 
 > A Vue.js project for mall
+> vue-cli vue vue-router vue-resource vue-lazyload axios
 
 ## Build Setup
 
@@ -18,4 +19,49 @@ npm run build
 npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+##项目文件修改内容
+
+#build/webpack.dev.conf.js
+模拟加载后台数据
+添加：
+```
+const express=require('express')
+const app=express()
+const router=express.Router()
+const goodsData=require('./../mock/goods.json')
+```
+在devServer: 下修改
+```
+//模拟加载后台数据
+    before(router){
+      router.get('/goods',(req,res)=>{
+        res.json(goodsData)
+      })
+      app.use(router)
+    }
+```
+
+#config/index.js
+运行时自动打开浏览器
+```
+autoOpenBrowser: true,
+```
+静态资源地址
+```
+assetsPublicPath: 'http://www.lorogy.com/lorogymail',
+```
+
+#mock
+模拟json数据
+
+#static
+大资源，需要请求
+
+#src/assets
+小资源，直接用于组件
+
+#src/components
+可复用的组件.vue
+
+#src/views
+界面模板
