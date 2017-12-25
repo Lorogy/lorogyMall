@@ -1,7 +1,13 @@
 # lorogymall
 
 > A Vue.js project for mall
-> vue-cli vue vue-router vue-resource vue-lazyload axios
+
+- vue-cli 手脚架工具
+- vue 
+- vue-router 路由插件
+- vue-resource 请求插件
+- vue-lazyload 图片懒加载
+- axios 请求插件，推荐
 
 ## Build Setup
 
@@ -56,5 +62,7 @@ assetsPublicPath: 'http://www.lorogy.com/lorogymail',
 小资源，直接用于组件
 ### src/components
 可复用的组件.vue
+Counter Header Breadcrumb Footer
 ### src/views
 界面模板
+GoodLists
