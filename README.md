@@ -67,12 +67,12 @@ Counter Header Breadcrumb Footer
 界面模板
 GoodLists
 
-##demo学习实例
-###demo
+## demo学习实例
+### demo
 es6 axios vue-resource
-###server
+### server
 nodejs
-###demo-server（express）
+### demo-server（express）
 express-generator生成的服务端项目，正常应该是里一个项目（这里为了方便）
 启动命令：
 ```
