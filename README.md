@@ -66,3 +66,36 @@ Counter Header Breadcrumb Footer
 ### src/views
 界面模板
 GoodLists
+
+##demo学习实例
+###demo
+es6 axios vue-resource
+###server
+nodejs
+###demo-server（express）
+express-generator生成的服务端项目，正常应该是里一个项目（这里为了方便）
+启动命令：
+```
+node /demo-server/bin/www
+```
+
+- 将package.json与lorogyMall项目的package.json合并（只用合并依赖）
+- `npm install`安装依赖
+- 修改模板引擎为html
+
+修改方法：
+
+- views 新建XXX.html文件
+- router 修改XXX
+- app.js 修改如下
+
+```
+var ejs = require('ejs');
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.engine('.html',ejs.__express);
+app.set('view engine', 'html');
+//app.set('view engine', 'jade');
+```
