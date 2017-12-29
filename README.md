@@ -121,7 +121,9 @@ app.set('view engine', 'html');
 - 在app.js增加新路由/goods
 
 接口：http://localhost:3000/goods
+
 功能：分页，按条件查询数据库商品信息
+
 查询条件(?)：page、pageSize、sort
 
 
