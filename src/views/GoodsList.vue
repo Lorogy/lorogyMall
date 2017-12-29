@@ -28,7 +28,7 @@
                 <ul>
                   <li v-for="(item,index) in goodsList">
                     <div class="pic">
-                      <a href="#"><img v-lazy="'/static/'+item.productImg" alt=""></a>
+                      <a href="#"><img v-lazy="'/static/'+item.productImage" alt=""></a>
                     </div>
                     <div class="main">
                       <div class="name">{{item.productName}}</div>
@@ -85,13 +85,25 @@
       NavBreadcrumb
     },
     mounted:function(){
+      //通过后台服务端接口获取数据库数据
       this.getGoodsList()
     },
     methods:{
       getGoodsList(){
-        axios.get("/goods").then((res)=>{
-          var result=res.data
-          this.goodsList=result.result
+        //config/index.js的dev下增加代理
+       /* proxyTable: {
+            '/goods':{
+                target:'http://localhost:3000'
+            }
+        }*/
+        axios.get("/goods").then((response)=>{
+          let res=response.data
+          if(res.status=="0"){
+            this.goodsList=res.result.list
+          }
+          else{
+            this.goodsList=[]
+          }
         })
       },
       showFilterPop(){

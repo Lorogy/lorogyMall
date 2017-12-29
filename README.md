@@ -2,6 +2,8 @@
 
 > A Vue.js project for mall
 
+前端插件：
+
 - vue-cli 手脚架工具
 - vue 
 - vue-router 路由插件
@@ -25,7 +27,7 @@ npm run build
 npm run build --report
 ```
 
-## 项目文件修改内容
+## 项目文件修改内容（前端，客户端）
 ### build/webpack.dev.conf.js
 模拟加载后台数据
 添加：
@@ -54,6 +56,14 @@ autoOpenBrowser: true,
 ```
 assetsPublicPath: 'http://www.lorogy.com/lorogymail',
 ```
+dev下增加代理，用于访问后台服务端提供的接口，获取数据库数据
+```
+proxyTable: {
+  '/goods':{
+      target:'http://localhost:3000'
+  }
+}
+```
 ### mock
 模拟json数据
 ### static
@@ -67,23 +77,27 @@ Counter Header Breadcrumb Footer
 界面模板
 GoodLists
 
-## demo学习实例
-### demo
-es6 axios vue-resource
-### server
-nodejs
-### demo-server（express）
+
+## demo-server（后端，服务端）
+
 express-generator生成的服务端项目，正常应该是里一个项目（这里为了方便）
-启动命令：
+
+### 启动命令
 ```
 node /demo-server/bin/www
 ```
+或者
+```
+pm2 start /demo-server/bin/www
+```
+
+### 修改部分
 
 - 将package.json与lorogyMall项目的package.json合并（只用合并依赖）
 - `npm install`安装依赖
 - 修改模板引擎为html
 
-修改方法：
+### jade修改为html方法：
 
 - views 新建XXX.html文件
 - router 修改XXX
@@ -99,3 +113,20 @@ app.engine('.html',ejs.__express);
 app.set('view engine', 'html');
 //app.set('view engine', 'jade');
 ```
+
+### 17-12-19增加功能
+- 引入mongoose
+- 建立model,增加goods模型
+- 在route新增路由，goods.js，建立后台接口api
+- 在app.js增加新路由/goods
+
+接口：http://localhost:3000/goods
+功能：分页，按条件查询数据库商品信息
+查询条件(?)：page、pageSize、sort
+
+
+## demo学习实例
+### demo
+es6 axios vue-resource
+### server
+nodejs
