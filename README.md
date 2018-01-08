@@ -9,6 +9,7 @@
 - vue-router 路由插件
 - vue-resource 请求插件
 - vue-lazyload 图片懒加载
+- vue-infinite-scroll 随滚动无线加载
 - axios 请求插件，推荐
 
 ## Build Setup
@@ -77,6 +78,18 @@ Counter Header Breadcrumb Footer
 界面模板
 GoodLists
 
+### src/views/GoodLists
+
+- 基础界面
+- 数据渲染
+- 响应式布局
+- 商品列表查询接口
+- 图片加载时动画
+- 商品列表分页
+- 商品列表排序
+- 价格过滤功能
+- 请求数据时loading动画
+
 
 ## demo-server（后端，服务端）
 
@@ -84,11 +97,11 @@ express-generator生成的服务端项目，正常应该是里一个项目（这
 
 ### 启动命令
 ```
-node /demo-server/bin/www
+node demo-server/bin/www
 ```
 或者
 ```
-pm2 start /demo-server/bin/www
+pm2 start demo-server/bin/www
 ```
 
 ### 修改部分
@@ -125,6 +138,27 @@ app.set('view engine', 'html');
 功能：分页，按条件查询数据库商品信息
 
 查询条件(?)：page、pageSize、sort
+
+### 18-1-1增加功能
+查询条件：priceLevel
+
+```
+let priceLevel=req.param("priceLevel");
+  var priceGt='',priceLte='';
+  if(priceLevel!=='all'){
+    switch(priceLevel){
+      case '0':priceGt=0;priceLte=500;break;
+      case '1':priceGt=500;priceLte=1000;break;
+      case '2':priceGt=1000;priceLte=2000;break;
+    }
+    params={
+      salePrice:{
+        $gt:priceGt,
+        $lte:priceLte
+      }
+    }
+  }
+  ```
 
 
 ## demo学习实例
