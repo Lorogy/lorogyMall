@@ -14,6 +14,7 @@ mongoose.connection.on("disconnected",()=>{
   console.log("MongoDB connected disconnected.")
 });
 
+//查询列表商品
 router.get("/",(req,res,next)=>{
   //分页，获取请求？page=1&pageSize=8&sort=1
   let page=parseInt(req.param("page"));
@@ -65,6 +66,87 @@ router.get("/",(req,res,next)=>{
           list:doc
         }
       })
+    }
+  })
+})
+
+
+//加入到购物车
+router.post("/addCart",(req,res,next)=>{console.log(req);
+  let userId='100000077';
+  //post请求
+  let productId=req.body.productId;
+  let User=require('../models/user');
+
+  //查找当前用户文档userDoc
+  User.findOne({userId:userId},(err,userDoc)=>{
+    if(err){
+      res.json({
+        status:'1',
+        msg:err.message
+      })
+    }else{
+      if(userDoc){
+        let goodsItem='';
+        //遍历购物车列表cartList，若此商品已存在，数量加一，保存；否则Goods查找商品信息，插入当前用户cartList，保存
+        userDoc.cartList.forEach((item)=>{
+          if(item.productId==productId){
+            goodsItem=item;
+            item.productNum++;
+          }
+        })
+        //若商品存在，goodsItem不为空；否则，goodsItem为空
+        if(goodsItem){
+          userDoc.save((err2,doc2)=>{
+                  if(err2){
+                    res.json({
+                      status:'1',
+                      msg:err2.message
+                    });
+                  }
+                  else{
+                    res.json({
+                      status:'0',
+                      msg:'',
+                      result:'success'
+                    })
+                  }
+                });
+        }else{
+          //查找要加入购物车商品信息doc1
+          Goods.findOne({productId:productId},(err1,doc1)=>{
+            if(err1){
+              res.json({
+                status:'1',
+                msg:err1.message
+              })
+            }
+            else{
+              if(doc1){
+                doc1.productNum=1;
+                doc1.checked=1;
+                //商品信息插入用户购物车列表
+                userDoc.cartList.push(doc1);
+                userDoc.save((err2,doc2)=>{
+                  if(err2){
+                    res.json({
+                      status:'1',
+                      msg:err2.message
+                    });
+                  }
+                  else{
+                    res.json({
+                      status:'0',
+                      msg:'',
+                      result:'success'
+                    })
+                  }
+                });
+              }
+            }
+          })
+        }
+      }
     }
   })
 })

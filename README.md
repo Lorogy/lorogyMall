@@ -89,6 +89,7 @@ GoodLists
 - 商品列表排序
 - 价格过滤功能
 - 请求数据时loading动画
+- 加入购物车接口
 
 
 ## demo-server（后端，服务端）
@@ -137,7 +138,7 @@ app.set('view engine', 'html');
 
 功能：分页，按条件查询数据库商品信息
 
-查询条件(?)：page、pageSize、sort
+查询条件(?)(params)：page、pageSize、sort
 
 ### 18-1-1增加功能
 查询条件：priceLevel
@@ -159,6 +160,18 @@ let priceLevel=req.param("priceLevel");
     }
   }
   ```
+
+### 18-1-9增加功能
+
+- 建立model,增加users模型
+- 建立新路由，post,建立后台api接口
+
+接口：http://localhost:3000/goods/addCart
+
+功能：当前用户的购物车信息添加
+
+请求条件(body)：productId
+
 
 
 ## demo学习实例
