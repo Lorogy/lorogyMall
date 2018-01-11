@@ -60,10 +60,16 @@ assetsPublicPath: 'http://www.lorogy.com/lorogymail',
 dev下增加代理，用于访问后台服务端提供的接口，获取数据库数据
 ```
 proxyTable: {
-  '/goods':{
-      target:'http://localhost:3000'
-  }
-}
+        '/goods':{
+            target:'http://localhost:3000'
+        },
+        '/goods/*':{
+            target:'http://localhost:3000'
+        },
+        '/users/*':{
+            target:'http://localhost:3000'
+        }
+    },
 ```
 ### mock
 模拟json数据
@@ -90,6 +96,11 @@ GoodLists
 - 价格过滤功能
 - 请求数据时loading动画
 - 加入购物车接口
+
+### src/components/Header
+
+- 登录功能
+- 登出功能
 
 
 ## demo-server（后端，服务端）
@@ -171,6 +182,13 @@ let priceLevel=req.param("priceLevel");
 功能：当前用户的购物车信息添加
 
 请求条件(body)：productId
+
+### 18-1-11增加功能
+登录接口post：查询数据库是否由此用户，若有记录cookie信息
+登出接口post：清除cookie信息
+
+接口：http://localhost:3000/goods/login
+接口：http://localhost:3000/goods/logout
 
 
 
