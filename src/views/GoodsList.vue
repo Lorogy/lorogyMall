@@ -9,7 +9,7 @@
             <a href="javascript:void(0)" class="default cur">Default</a>
             <a href="javascript:void(0)" class="price" @click="sortGoods">
               Price 
-              <svg class="icon icon-arrow-short">
+              <svg class="icon icon-arrow-short" v-bind:class="{'sort-up':sortFlag}">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-arrow-short"></use>
               </svg>
             </a>
@@ -55,6 +55,26 @@
         </div>
       </div>
       <div class="md-overlay" v-show="overLayFlag" @click="closePop"></div>
+      <modal v-bind:mdShow="mdShow" v-on:close="closeModal">
+        <p slot="message">
+          请先登录，否则无法加入到购物车！
+        </p>
+        <div slot="btnGroup">
+          <a class="btn btn--m" @click="closeModal">关闭</a>
+        </div>
+      </modal>
+      <modal v-bind:mdShow="mdShowCart" v-on:close="closeModal">
+        <p slot="message">
+          <svg class="icon-status-ok">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-status-ok"></use>
+          </svg>
+          <span>加入购物车成功！</span>
+        </p>
+        <div slot="btnGroup">
+          <a class="btn btn--m" @click="mdShowCart=false">继续购物</a>
+          <router-link class="btn btn--m" href="javascript:void(0)" to="/cart">查看购物车</router-link>
+        </div>
+      </modal>
       <nav-footer></nav-footer>
   </div>
 </template>
@@ -64,6 +84,14 @@
   line-height: 100px;
   text-align: center;
 }
+.sort-up{
+  transform: rotate(180deg);
+  transition: all .3s ease-out;
+}
+.btn:hover{
+  background-color: #ff1516;
+  transition: all .3s ease-out;
+}
 </style>
 <script>
  import './../assets/css/base.css'
@@ -71,6 +99,7 @@
  import NavHeader from '@/components/Header.vue'
  import NavFooter from '@/components/Footer.vue'
  import NavBreadcrumb from '@/components/Breadcrumb.vue'
+ import Modal from '@/components/Modal.vue'
  import axios from 'axios'
  
   export default{
@@ -103,13 +132,17 @@
         //图片随滚动继续加载功能，默认关闭
         busy:true,
         //请求数据动画svg，默认不显示,向后台请求数据时显示
-        loading:false
+        loading:false,
+        //模态框Modal默认不显示
+        mdShow:false,
+        mdShowCart:false
       }
     },
     components:{
       NavHeader,
       NavFooter,
-      NavBreadcrumb
+      NavBreadcrumb,
+      Modal
     },
     mounted:function(){
       //通过后台服务端接口获取数据库数据
@@ -132,7 +165,7 @@
                   target:'http://localhost:3000'
               }
           }*/
-        axios.get("/goods",{
+        axios.get("/goods/list",{
           params:param
         }).then((response)=>{
           let res=response.data
@@ -208,12 +241,18 @@
           productId:productId
         }).then((res)=>{
           if(res.data.status=="0"){
-            alert("加入成功")
+            this.mdShowCart=true
+            //alert("加入成功")
           }
           else{
-            alert("msg:"+res.data.msg)
+            this.mdShow=true
+            //alert("msg:"+res.data.msg)
           }
         })
+      },
+      //关闭模态框
+      closeModal(){
+        this.mdShow=false
       }
     }
   }

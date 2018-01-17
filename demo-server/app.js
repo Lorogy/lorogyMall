@@ -26,6 +26,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//登录拦截，加入购物车等请求必须登录才后能执行
+app.use(function(req,res,next){
+  console.log(`登录用户：${req.cookies.userId}`);
+  if(req.cookies.userId){
+    next();
+  }else{
+    console.log(`path:${req.path},originalUrl:${req.originalUrl}`);
+    //req.originalUrl.indexOf('/goods/list')>-1
+    if(req.originalUrl=='/users/login'||req.originalUrl=='/users/logout'||req.path=='/goods/list'){
+      next();
+    }else{
+      res.json({
+        status:'10001',
+        msg:'当前未登录',
+        result:''
+      })
+    }
+  }
+});
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/goods', goods);

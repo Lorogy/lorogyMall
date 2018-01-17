@@ -157,7 +157,18 @@
         nickName:false//false,不显示用户名，显示login按钮，不显示logout按钮；true,显示用户名，不显示login按钮，显示logout按钮
       }
     },
+    mounted:function(){
+      this.checkLogin()
+    },
     methods:{
+      checkLogin(){
+        axios.get("/users/checkLogin").then((response)=>{
+          let res=response.data
+          if(res.status=='0'){
+            this.nickName=res.result.userName
+          }
+        })
+      },
       //回车键或登录按钮触发登录事件
       login(){
         if(!this.userName||!this.userPwd){

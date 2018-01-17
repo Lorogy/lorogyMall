@@ -15,7 +15,7 @@ mongoose.connection.on("disconnected",()=>{
 });
 
 //查询列表商品
-router.get("/",(req,res,next)=>{
+router.get("/list",(req,res,next)=>{
   //分页，获取请求？page=1&pageSize=8&sort=1
   let page=parseInt(req.param("page"));
   let pageSize=parseInt(req.param("pageSize"));
@@ -72,7 +72,7 @@ router.get("/",(req,res,next)=>{
 
 
 //加入到购物车
-router.post("/addCart",(req,res,next)=>{console.log(req);
+router.post("/addCart",(req,res,next)=>{
   let userId='100000077';
   //post请求
   let productId=req.body.productId;
