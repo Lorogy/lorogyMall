@@ -253,6 +253,7 @@
       //关闭模态框
       closeModal(){
         this.mdShow=false
+        this.mdShowCart=false
       }
     }
   }

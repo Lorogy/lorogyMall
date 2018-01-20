@@ -154,7 +154,8 @@
         userPwd:'',//用户密码，v-model绑定
         errorTip:false,//v-show,false错误提示不显示，true错误提示显示；也可用v-if
         loginModalFlag:false,//是否显示登录modal框
-        nickName:false//false,不显示用户名，显示login按钮，不显示logout按钮；true,显示用户名，不显示login按钮，显示logout按钮
+        nickName:false,//false,不显示用户名，显示login按钮，不显示logout按钮；true,显示用户名，不显示login按钮，显示logout按钮
+        cartCount:0
       }
     },
     mounted:function(){

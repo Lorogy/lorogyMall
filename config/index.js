@@ -10,7 +10,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    //代理，配置后可以跨域请求
+    //代理，配置后可以跨域请求，仅限于开发模式，部署线上时不能用
     proxyTable: {
         '/goods':{
             target:'http://localhost:3000'

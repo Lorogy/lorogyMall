@@ -88,4 +88,58 @@ router.get("/checkLogin",function(req,res,next) {
   }
 });
 
+//查询当前用户购物车数据
+router.get("/cartList",function(req,res,next){
+  let userId=req.cookies.userId;
+  User.findOne({userId:userId},(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+         res.json({
+          status:"0",
+          msg:"",
+          result:doc.cartList
+        })   
+      }
+    }
+  });
+});
+
+//购物车删除
+router.post("/cartDel",function(req,res,next){
+  let userId=req.cookies.userId;
+  let productId=req.body.productId;
+
+  User.update({
+    userId:userId
+  },{
+    $pull:{
+      'cartList':{
+        'productId':productId
+      }
+    }
+  },(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+         res.json({
+          status:"0",
+          msg:"",
+          result:"success"
+        })   
+      }
+    }
+  });
+});
+
 module.exports = router;

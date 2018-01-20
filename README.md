@@ -59,6 +59,7 @@ assetsPublicPath: 'http://www.lorogy.com/lorogymail',
 ```
 dev下增加代理，用于访问后台服务端提供的接口，获取数据库数据
 ```
+//*一级**多级
 proxyTable: {
         '/goods':{
             target:'http://localhost:3000'
@@ -80,9 +81,11 @@ proxyTable: {
 ### src/components
 可复用的组件.vue
 Counter Header Breadcrumb Footer Modal
+计数    头部   面包屑     底部   模态框
 ### src/views
 界面模板
-GoodLists
+GoodLists  购物页面
+Cart  购物车页面
 
 ### src/views/GoodLists
 
@@ -104,6 +107,12 @@ GoodLists
 - 登录功能
 - 登出功能
 - 登录判断（mounted，如刷新）
+
+### src/components/Cart
+
+- 购物车界面
+- 购物车列表功能
+- 商品删除功能
 
 
 ## demo-server（后端，服务端）
@@ -220,6 +229,66 @@ app.use(function(req,res,next){
 
 接口GET：判断请求时，cookie是否有用户登录信息
 接口：http://localhost:3000/users/checkLogin
+
+### 18-1-20增加功能
+购物车商品列表接口(get)：http://localhost:3000/users/cartList
+购物车商品删除接口(post)：http://localhost:3000/users/cartDel
+
+```
+//查询当前用户购物车数据
+router.get("/cartList",function(req,res,next){
+  let userId=req.cookies.userId;
+  User.findOne({userId:userId},(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+         res.json({
+          status:"0",
+          msg:"",
+          result:doc.cartList
+        })   
+      }
+    }
+  });
+});
+
+//购物车删除
+router.post("/cartDel",function(req,res,next){
+  let userId=req.cookies.userId;
+  let productId=req.body.productId;
+
+  User.update({
+    userId:userId
+  },{
+    $pull:{
+      'cartList':{
+        'productId':productId
+      }
+    }
+  },(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+         res.json({
+          status:"0",
+          msg:"",
+          result:"success"
+        })   
+      }
+    }
+  });
+});
+```
 
 
 ## demo学习实例
