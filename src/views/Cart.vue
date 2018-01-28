@@ -60,7 +60,7 @@
               <li v-for="item in cartList">
                 <div class="cart-tab-1">
                   <div class="cart-item-check">
-                    <a href="javascipt:;" class="checkbox-btn item-check-btn">
+                    <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'check':item.checked}" @click="editCart('checked',item)">
                       <svg class="icon icon-ok">
                         <use xlink:href="#icon-ok"></use>
                       </svg>
@@ -74,21 +74,21 @@
                   </div>
                 </div>
                 <div class="cart-tab-2">
-                  <div class="item-price">{{item.salePrice}}</div>
+                  <div class="item-price">{{item.salePrice | currency('$')}}</div>
                 </div>
                 <div class="cart-tab-3">
                   <div class="item-quantity">
                     <div class="select-self select-self-open">
                       <div class="select-self-area">
-                        <a class="input-sub">-</a>
+                        <a class="input-sub" @click="editCart('minu',item)">-</a>
                         <span class="select-ipt">{{item.productNum}}</span>
-                        <a class="input-add">+</a>
+                        <a class="input-add" @click="editCart('add',item)">+</a>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="cart-tab-4">
-                  <div class="item-price-total">{{(item.productNum*item.salePrice)}}</div>
+                  <div class="item-price-total">{{(item.productNum*item.salePrice) | currency('$')}}</div>
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
@@ -107,8 +107,8 @@
           <div class="cart-foot-inner">
             <div class="cart-foot-l">
               <div class="item-all-check">
-                <a href="javascipt:;">
-                  <span class="checkbox-btn item-check-btn">
+                <a href="javascipt:;" @click="toggleCheckAll">
+                  <span class="checkbox-btn item-check-btn" v-bind:class="{'check':checkAllFlag}">
                       <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
                   </span>
                   <span>Select all</span>
@@ -117,7 +117,7 @@
             </div>
             <div class="cart-foot-r">
               <div class="item-total">
-                Item total: <span class="total-price"></span>
+                Item total: <span class="total-price">{{totalPrice | currency('$')}}</span>
               </div>
               <div class="btn-wrap">
                 <a class="btn btn--red">Checkout</a>
@@ -174,7 +174,8 @@
       return{
         cartList:[],
         modalConfirm:false,//模态框
-        productId:''
+        productId:'',
+        //checkAllFlag:false,
       }
     },
     mounted(){
@@ -185,6 +186,30 @@
       NavFooter,
       NavBreadcrumb,
       Modal
+    },
+    //是属性而非方法，实时计算
+    computed:{
+      checkAllFlag(){
+        return this.checkedCount==this.cartList.length
+      },
+      checkedCount(){
+        let i=0
+        this.cartList.forEach((item)=>{
+          if(item.checked){
+            i++
+          }
+        })
+        return i
+      },
+      totalPrice(){
+        let total=0
+        this.cartList.forEach((item)=>{
+          if(item.checked){
+            total+=item.productNum*item.salePrice
+          }
+        })
+        return total
+      }
     },
     methods:{
       //初始化，请求当前用户购物车数据
@@ -209,6 +234,39 @@
             this.modalConfirm=false
             this.init()
           }
+        })
+      },
+      //更新数据：购物车商品数量、选中状态等
+      editCart(flag,item){
+        if(flag=="add"){
+          item.productNum++
+        }else if(flag=="checked"){
+          item.checked=!item.checked
+        }else{
+          if(item.productNum>1){
+            item.productNum--
+          }else{
+            return
+          }
+        }
+        axios.post("/users/cartEdit",{
+          productId:item.productId,
+          productNum:item.productNum,
+          checked:item.checked
+        }).then((response)=>{
+          let res=response.data
+        })
+      },
+      //
+      toggleCheckAll(){
+        let flag=!this.checkAllFlag
+        this.cartList.forEach((item)=>{
+          item.checked=flag
+        })
+        axios.post("/users/cartEditCheckAll",{
+          checkAll:flag
+        }).then((response)=>{
+          let res=response.data
         })
       },
       closeModal(){

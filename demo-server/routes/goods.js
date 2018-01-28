@@ -73,7 +73,7 @@ router.get("/list",(req,res,next)=>{
 
 //加入到购物车
 router.post("/addCart",(req,res,next)=>{
-  let userId='100000077';
+  let userId=req.cookies.userId;
   //post请求
   let productId=req.body.productId;
   let User=require('../models/user');
@@ -124,7 +124,7 @@ router.post("/addCart",(req,res,next)=>{
             else{
               if(doc1){
                 doc1.productNum=1;
-                doc1.checked=1;
+                doc1.checked=true;
                 //商品信息插入用户购物车列表
                 userDoc.cartList.push(doc1);
                 userDoc.save((err2,doc2)=>{

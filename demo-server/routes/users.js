@@ -115,8 +115,9 @@ router.post("/cartDel",function(req,res,next){
   let userId=req.cookies.userId;
   let productId=req.body.productId;
 
+//$pull修饰符会删除掉组合中符合条件的元素
   User.update({
-    userId:userId
+    "userId":userId
   },{
     $pull:{
       'cartList':{
@@ -137,6 +138,77 @@ router.post("/cartDel",function(req,res,next){
           msg:"",
           result:"success"
         })   
+      }
+    }
+  });
+});
+
+//购物车商品数量加减以及选中状态改变
+router.post("/cartEdit",function(req,res,next){
+  let userId=req.cookies.userId;
+  let productId=req.body.productId;
+  let productNum=req.body.productNum;
+  let checked=req.body.checked;
+
+  User.update({
+    "userId":userId,
+    "cartList.productId":productId
+  },{
+    "cartList.$.productNum":productNum,
+    "cartList.$.checked":checked
+  },(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+         res.json({
+          status:"0",
+          msg:"",
+          result:"success"
+        })   
+      }
+    }
+  });
+});
+
+//购物车全选
+router.post("/cartEditCheckAll",function(req,res,next){
+  let userId=req.cookies.userId;
+  let checkAll=req.body.checkAll;
+
+  User.findOne({userId:userId},(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+        doc.cartList.forEach((item)=>{
+          item.checked=checkAll;
+        })
+        doc.save((err1,doc1)=>{
+          if(err1){
+            res.json({
+              status:"1",
+              msg:err.message,
+              result:""
+            })
+          }else{
+            if(doc1){
+               res.json({
+                status:"0",
+                msg:"",
+                result:"success"
+              })   
+            }
+          }
+        })
       }
     }
   });

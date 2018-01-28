@@ -60,12 +60,13 @@ assetsPublicPath: 'http://www.lorogy.com/lorogymail',
 dev下增加代理，用于访问后台服务端提供的接口，获取数据库数据
 ```
 //*一级**多级
+** 注意 尽量使用ip而不是localhost **
 proxyTable: {
         '/goods':{
-            target:'http://localhost:3000'
+            target:'http://127.0.0.1:3000'
         },
         '/goods/*':{
-            target:'http://localhost:3000'
+            target:'http://127.0.0.1:3000'
         },
         '/users/*':{
             target:'http://localhost:3000'
@@ -76,8 +77,29 @@ proxyTable: {
 模拟json数据
 ### static
 大资源，需要请求
+### src/main.js
+全局插件配置
+```
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+import VueLazyLoad from 'vue-lazyload'
+import infiniteScroll from 'vue-infinite-scroll'
+import {currency} from './util/currency'
+
+Vue.config.productionTip = false
+Vue.filter("currency",currency)
+
+Vue.use(VueLazyLoad,{
+  loading:"/static/loading-svg/loading-bars.svg"
+})
+
+Vue.use(infiniteScroll)
+```
 ### src/assets
 小资源，直接用于组件
+### src/util
+通用文件，currency:金额格式化（$）
 ### src/components
 可复用的组件.vue
 Counter Header Breadcrumb Footer Modal
@@ -113,6 +135,10 @@ Cart  购物车页面
 - 购物车界面
 - 购物车列表功能
 - 商品删除功能
+- 商品数量加减
+- 商品选中功能
+- 商品全选功能
+- 实时计算功能（是否全选、选中商品总额）
 
 
 ## demo-server（后端，服务端）
@@ -157,11 +183,11 @@ app.set('view engine', 'html');
 - 在route新增路由，goods.js，建立后台接口api
 - 在app.js增加新路由/goods/list
 
-接口：http://localhost:3000/goods/list
+<br/>
 
-功能：分页，按条件查询数据库商品信息
-
-查询条件(?)(params)：page、pageSize、sort
+- 接口：http://localhost:3000/goods/list
+- 功能：分页，按条件查询数据库商品信息
+- 查询条件(?)(params)：page、pageSize、sort
 
 ### 18-1-1增加功能
 查询条件：priceLevel
@@ -189,21 +215,23 @@ let priceLevel=req.param("priceLevel");
 - 建立model,增加users模型
 - 建立新路由，post,建立后台api接口
 
-接口：http://localhost:3000/goods/addCart
+<br/>
 
-功能：当前用户的购物车信息添加
-
-请求条件(body)：productId
+- 接口：http://localhost:3000/goods/addCart
+- 功能：当前用户的购物车信息添加
+- 请求条件(body)：productId
 
 ### 18-1-11增加功能
-登录接口post：查询数据库是否由此用户，若有记录cookie信息
-登出接口post：清除cookie信息
+- 登录接口post：查询数据库是否由此用户，若有记录cookie信息
+- 登出接口post：清除cookie信息
 
-接口：http://localhost:3000/goods/login
-接口：http://localhost:3000/goods/logout
+<br/>
+
+- 接口：http://localhost:3000/goods/login
+- 接口：http://localhost:3000/goods/logout
 
 ### 18-1-17增加功能
-app.js添加全局拦截
+- app.js添加全局拦截
 
 ```
 //登录拦截，加入购物车等请求必须登录才后能执行
@@ -227,68 +255,16 @@ app.use(function(req,res,next){
 });
 ```
 
-接口GET：判断请求时，cookie是否有用户登录信息
-接口：http://localhost:3000/users/checkLogin
+- 接口GET：判断请求时，cookie是否有用户登录信息
+- 接口：http://localhost:3000/users/checkLogin
 
 ### 18-1-20增加功能
-购物车商品列表接口(get)：http://localhost:3000/users/cartList
-购物车商品删除接口(post)：http://localhost:3000/users/cartDel
+- 购物车商品列表接口(get)：http://localhost:3000/users/cartList
+- 购物车商品删除接口(post)：http://localhost:3000/users/cartDel
 
-```
-//查询当前用户购物车数据
-router.get("/cartList",function(req,res,next){
-  let userId=req.cookies.userId;
-  User.findOne({userId:userId},(err,doc)=>{
-    if(err){
-      res.json({
-        status:"1",
-        msg:err.message,
-        result:""
-      })
-    }else{
-      if(doc){
-         res.json({
-          status:"0",
-          msg:"",
-          result:doc.cartList
-        })   
-      }
-    }
-  });
-});
-
-//购物车删除
-router.post("/cartDel",function(req,res,next){
-  let userId=req.cookies.userId;
-  let productId=req.body.productId;
-
-  User.update({
-    userId:userId
-  },{
-    $pull:{
-      'cartList':{
-        'productId':productId
-      }
-    }
-  },(err,doc)=>{
-    if(err){
-      res.json({
-        status:"1",
-        msg:err.message,
-        result:""
-      })
-    }else{
-      if(doc){
-         res.json({
-          status:"0",
-          msg:"",
-          result:"success"
-        })   
-      }
-    }
-  });
-});
-```
+### 18-1-28增加功能
+- 购物车商品信息（数量，选中状态）修改接口(post)：http://localhost:3000/users/cartEdit
+- 购物车商品全选接口(post)：http://localhost:3000/users/cartEditCheckAll
 
 
 ## demo学习实例
