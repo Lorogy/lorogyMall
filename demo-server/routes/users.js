@@ -70,6 +70,7 @@ router.post('/logout', function(req, res, next) {
   });
 });
 
+//判断用户是否登录
 router.get("/checkLogin",function(req,res,next) {
   if(req.cookies.userId){
     res.json({
@@ -209,6 +210,104 @@ router.post("/cartEditCheckAll",function(req,res,next){
             }
           }
         })
+      }
+    }
+  });
+});
+
+//查询当前用户地址数据
+router.get("/addressList",function(req,res,next){
+  let userId=req.cookies.userId;
+  User.findOne({userId:userId},(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+         res.json({
+          status:"0",
+          msg:"",
+          result:doc.addressList
+        })   
+      }
+    }
+  });
+});
+
+//设置默认地址
+router.post("/setDefault",function(req,res,next){
+  let userId=req.cookies.userId;
+  let addressId=req.body.addressId;
+
+  User.findOne({userId:userId},(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+        doc.addressList.forEach((item)=>{
+          if(item.addressId==addressId){
+            item.isDefault=true;
+          }else{
+            item.isDefault=false;
+          }
+        })
+        doc.save((err1,doc1)=>{
+          if(err1){
+            res.json({
+              status:"1",
+              msg:err.message,
+              result:""
+            })
+          }else{
+            if(doc1){
+               res.json({
+                status:"0",
+                msg:"",
+                result:""
+              })   
+            }
+          }
+        })
+      }
+    }
+  });
+});
+
+//地址删除
+router.post("/addressDel",function(req,res,next){
+  let userId=req.cookies.userId;
+  let addressId=req.body.addressId;
+
+//$pull修饰符会删除掉组合中符合条件的元素
+  User.update({
+    "userId":userId
+  },{
+    $pull:{
+      'addressList':{
+        'addressId':addressId
+      }
+    }
+  },(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+         res.json({
+          status:"0",
+          msg:"",
+          result:"success"
+        })   
       }
     }
   });

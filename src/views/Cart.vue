@@ -74,7 +74,7 @@
                   </div>
                 </div>
                 <div class="cart-tab-2">
-                  <div class="item-price">{{item.salePrice | currency('$')}}</div>
+                  <div class="item-price">{{item.salePrice | currency('￥')}}</div>
                 </div>
                 <div class="cart-tab-3">
                   <div class="item-quantity">
@@ -88,7 +88,7 @@
                   </div>
                 </div>
                 <div class="cart-tab-4">
-                  <div class="item-price-total">{{(item.productNum*item.salePrice) | currency('$')}}</div>
+                  <div class="item-price-total">{{(item.productNum*item.salePrice) | currency('￥')}}</div>
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
@@ -117,23 +117,23 @@
             </div>
             <div class="cart-foot-r">
               <div class="item-total">
-                Item total: <span class="total-price">{{totalPrice | currency('$')}}</span>
+                Item total: <span class="total-price">{{totalPrice | currency('￥')}}</span>
               </div>
               <div class="btn-wrap">
-                <a class="btn btn--red">Checkout</a>
+                <a class="btn btn--red" v-bind:class="{'btn--dis':checkedCount==0}" @click="checkout">Checkout</a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <Modal v-bind:mdShow="modalConfirm" @close="closeModal">
+    <modal v-bind:mdShow="modalConfirm" @close="closeModal">
       <p slot="message">你确认要删除此条数据吗?</p>
       <div slot="btnGroup">
         <a class="btn btn--m" href="javascript:;" @click="delCart">确认</a>
         <a class="btn btn--m btn--red" href="javascript:;" @click="modalConfirm = false">关闭</a>
       </div>
-    </Modal>
+    </modal>
     <nav-footer></nav-footer>
   </div>
 </template>
@@ -257,7 +257,7 @@
           let res=response.data
         })
       },
-      //
+      //全选切换
       toggleCheckAll(){
         let flag=!this.checkAllFlag
         this.cartList.forEach((item)=>{
@@ -268,6 +268,14 @@
         }).then((response)=>{
           let res=response.data
         })
+      },
+      //结算
+      checkout(){
+        if(this.checkedCount>0){
+          this.$router.push({
+            path:"/address"
+          })
+        }
       },
       closeModal(){
         this.modalConfirm=false

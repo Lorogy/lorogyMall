@@ -96,18 +96,65 @@ Vue.use(VueLazyLoad,{
 
 Vue.use(infiniteScroll)
 ```
+### src/router
+前端路由
+```
+import Vue from 'vue'
+import Router from 'vue-router'
+import GoodsList from '@/views/GoodsList'
+import Cart from '@/views/Cart'
+import Address from '@/views/Address'
+
+Vue.use(Router)
+
+export default new Router({
+  //默认路由模式mode:'hash'有#
+  //history无#，主流方式
+  mode:'history',
+  routes: [
+    {
+      path:'/',
+      name:'GoodsList',
+      components:{
+        default:GoodsList
+      }
+    },
+    {
+      path:'/cart',
+      name:'Cart',
+      component:Cart
+    },
+    {
+      path:'/address',
+      name:'Address',
+      component:Address
+    }
+  ]
+})
+```
 ### src/assets
 小资源，直接用于组件
 ### src/util
-通用文件，currency:金额格式化（$）
+通用文件，currency:金额格式化（$/￥）
 ### src/components
-可复用的组件.vue
+
+- 可复用的组件.vue
+
 Counter Header Breadcrumb Footer Modal
 计数    头部   面包屑     底部   模态框
+
+### src/components/Header
+
+- 登录功能
+- 登出功能
+- 登录判断（mounted，如刷新）
+
 ### src/views
 界面模板
-GoodLists  购物页面
-Cart  购物车页面
+
+- GoodLists  购物页面
+- Cart  购物车页面
+- Address 地址页面
 
 ### src/views/GoodLists
 
@@ -124,13 +171,7 @@ Cart  购物车页面
 - 登录全局拦截
 - 全局模态框组件Modal实现（添加购物车提示，父子组件变量双向绑定）
 
-### src/components/Header
-
-- 登录功能
-- 登出功能
-- 登录判断（mounted，如刷新）
-
-### src/components/Cart
+### src/views/Cart
 
 - 购物车界面
 - 购物车列表功能
@@ -139,6 +180,15 @@ Cart  购物车页面
 - 商品选中功能
 - 商品全选功能
 - 实时计算功能（是否全选、选中商品总额）
+
+### src/views/Address
+
+- 基础界面
+- 地址列表渲染
+- 地址列表切换
+- 地址列表展开
+- 默认地址设置
+- 地址删除
 
 
 ## demo-server（后端，服务端）
@@ -266,6 +316,14 @@ app.use(function(req,res,next){
 - 购物车商品信息（数量，选中状态）修改接口(post)：http://localhost:3000/users/cartEdit
 - 购物车商品全选接口(post)：http://localhost:3000/users/cartEditCheckAll
 
+### 18-1-29增加功能
+- 补全/models/user.js模型的addressList数组类型
+
+<br/>
+
+- 用户地址信息查询接口(get)：http://localhost:3000/users/addressList
+- 默认地址设置接口(post)：http://localhost:3000/users/setDefault
+- 地址删除接口(post)：http://localhost:3000/users/addressDel
 
 ## demo学习实例
 ### demo
