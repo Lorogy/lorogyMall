@@ -125,9 +125,24 @@ export default new Router({
       component:Cart
     },
     {
+      path: '/goods',
+      name: 'GoodsList',
+      component: GoodsList
+    },
+    {
       path:'/address',
       name:'Address',
       component:Address
+    },
+    {
+      path:'/orderConfirm',
+      name:'OrderConfirm',
+      component:OrderConfirm
+    },
+    {
+      path:'/orderSuccess',
+      name:'OrderSuccess',
+      component:OrderSuccess
     }
   ]
 })
@@ -155,6 +170,8 @@ Counter Header Breadcrumb Footer Modal
 - GoodLists  购物页面
 - Cart  购物车页面
 - Address 地址页面
+- OrderConfirm 订单创建页面
+- OrderSuccess 订单创建成功页面
 
 ### src/views/GoodLists
 
@@ -189,6 +206,19 @@ Counter Header Breadcrumb Footer Modal
 - 地址列表展开
 - 默认地址设置
 - 地址删除
+
+### src/views/OrderConfirm
+
+- 基础界面
+- 订单商品列表
+- 订单金额计算
+- 订单确认（通过后端接口生成订单）
+
+### src/views/OrderSuccess
+
+- 基础界面
+- 订单信息（订单号、订单总额）
+- 跳转（主页、购物车页面）
 
 
 ## demo-server（后端，服务端）
@@ -324,6 +354,16 @@ app.use(function(req,res,next){
 - 用户地址信息查询接口(get)：http://localhost:3000/users/addressList
 - 默认地址设置接口(post)：http://localhost:3000/users/setDefault
 - 地址删除接口(post)：http://localhost:3000/users/addressDel
+
+### 18-3-1增加功能
+- util/util.js 日期格式化 Format()
+- payMent接口功能：订单号生成、订单日期生成等等
+
+<br/>
+
+- 订单创建生成接口(post)：http://localhost:3000/users/payMent
+- 通过订单号获取订单信息接口(get): http://localhost:3000/users/orderDetail
+
 
 ## demo学习实例
 ### demo

@@ -60,7 +60,7 @@
             <div class="addr-list-wrap">
               <div class="addr-list">
                 <ul>
-                  <li v-for="(item,index) in addressListFilter" v-bind:class="{'check':checkIndex==index}" @click="checkIndex=index">
+                  <li v-for="(item,index) in addressListFilter" v-bind:class="{'check':checkIndex==index}" @click="checkIndex=index;selectedAddrId=item.addressId">
                     <dl>
                       <dt>{{item.userName}}</dt>
                       <dd class="address">{{item.streetName}}</dd>
@@ -145,6 +145,8 @@
       return{
         addressList:[],
         modalConfirm:false,
+        selectedAddrId:'',
+        addressId:'',
         limit:3,
         checkIndex:0
       }
@@ -168,6 +170,7 @@
         axios.get("/users/addressList").then((response)=>{
           let res=response.data
           this.addressList=res.result
+          this.selectedAddrId = this.addressList[0].addressId
         })
       },
       closeModal(){
