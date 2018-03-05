@@ -31,7 +31,7 @@
             <router-link to="/cart" class="btn btn--m">Cart List</router-link>
           </div>
           <div class="btn-r-wrap">
-            <router-link to="/goods" class="btn btn--m">Goods List</router-link>
+            <router-link to="/" class="btn btn--m">Goods List</router-link>
           </div>
         </div>
       </div>

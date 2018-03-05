@@ -147,6 +147,7 @@
 <script>
   import './../assets/css/login.css'
   import axios from 'axios'
+  import {mapState} from 'vuex'
   export default{
     data(){
       return {
@@ -154,9 +155,18 @@
         userPwd:'',//用户密码，v-model绑定
         errorTip:false,//v-show,false错误提示不显示，true错误提示显示；也可用v-if
         loginModalFlag:false,//是否显示登录modal框
-        nickName:false,//false,不显示用户名，显示login按钮，不显示logout按钮；true,显示用户名，不显示login按钮，显示logout按钮
-        cartCount:0
+        //nickName:false,//false,不显示用户名，显示login按钮，不显示logout按钮；true,显示用户名，不显示login按钮，显示logout按钮
+        //cartCount:0
       }
+    },
+    computed:{
+      ...mapState(['nickName','cartCount'])
+      /*nickName(){
+        return this.$store.state.nickName
+      },
+      cartCount(){
+        return this.$store.state.cartCount
+      }*/
     },
     mounted:function(){
       this.checkLogin()
@@ -166,7 +176,9 @@
         axios.get("/users/checkLogin").then((response)=>{
           let res=response.data
           if(res.status=='0'){
-            this.nickName=res.result.userName
+            //this.nickName=res.result.userName
+            this.$store.commit("updateUserInfo",res.result.userName)
+            this.getCartCount()
           }
         })
       },
@@ -185,7 +197,9 @@
           if(res.status=="0"){
             this.errorTip=false
             this.loginModalFlag=false
-            this.nickName=res.result.userName
+            //this.nickName=res.result.userName
+            this.$store.commit("updateUserInfo",res.result.userName)
+            this.getCartCount()
           }else{
             this.errorTip=true
             this.loginModalFlag=true
@@ -198,7 +212,17 @@
           let res=response.data
           //清空cookie
           if(res.status=="0"){
-            this.nickName=false
+            //this.nickName=false
+            this.$store.commit("updateUserInfo",'')
+            this.$store.commit("updateCartCount",0)
+          }
+        })
+      },
+      getCartCount(){
+        axios.get("/users/getCartCount").then((response)=>{
+          let res=response.data
+          if(res.status=="0"){
+            this.$store.commit("updateCartCount",res.result)
           }
         })
       }

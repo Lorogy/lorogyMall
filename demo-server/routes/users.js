@@ -34,7 +34,7 @@ router.post('/login', function(req, res, next) {
         })
         //保存session信息，需用插件才生效
        // req.session.user=doc;
-        
+
         res.json({
           status:"0",
           msg:"",
@@ -106,7 +106,7 @@ router.get("/cartList",function(req,res,next){
           status:"0",
           msg:"",
           result:doc.cartList
-        })   
+        })
       }
     }
   });
@@ -139,7 +139,7 @@ router.post("/cartDel",function(req,res,next){
           status:"0",
           msg:"",
           result:"success"
-        })   
+        })
       }
     }
   });
@@ -171,7 +171,7 @@ router.post("/cartEdit",function(req,res,next){
           status:"0",
           msg:"",
           result:"success"
-        })   
+        })
       }
     }
   });
@@ -207,7 +207,7 @@ router.post("/cartEditCheckAll",function(req,res,next){
                 status:"0",
                 msg:"",
                 result:"success"
-              })   
+              })
             }
           }
         })
@@ -232,7 +232,7 @@ router.get("/addressList",function(req,res,next){
           status:"0",
           msg:"",
           result:doc.addressList
-        })   
+        })
       }
     }
   });
@@ -272,7 +272,7 @@ router.post("/setDefault",function(req,res,next){
                 status:"0",
                 msg:"",
                 result:""
-              })   
+              })
             }
           }
         })
@@ -308,7 +308,7 @@ router.post("/addressDel",function(req,res,next){
           status:"0",
           msg:"",
           result:"success"
-        })   
+        })
       }
     }
   });
@@ -418,14 +418,41 @@ router.get("/orderDetail",function(req,res,next){
               orderId:orderId,
               orderTotal:orderTotal
             }
-          })  
+          })
         }else{
           res.json({
             status:"120001",
             msg:"此用户无订单信息",
             result:''
           })
-        }   
+        }
+      }
+    }
+  });
+});
+
+//查询当前用户购物车商品数量
+router.get("/getCartCount",function(req,res,next){
+  let userId=req.cookies.userId;
+  User.findOne({userId:userId},(err,doc)=>{
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:""
+      })
+    }else{
+      if(doc){
+        let cartList=doc.cartList;
+        let cartCount=0;
+        cartList.map((item)=>{
+          cartCount+=parseInt(item.productNum);
+        })
+         res.json({
+          status:"0",
+          msg:"",
+          result:cartCount
+        })
       }
     }
   });

@@ -5,12 +5,13 @@
 前端插件：
 
 - vue-cli 手脚架工具
-- vue 
+- vue
 - vue-router 路由插件
 - vue-resource 请求插件
 - vue-lazyload 图片懒加载
 - vue-infinite-scroll 随滚动无线加载
 - axios 请求插件，推荐
+- vuex 状态管理
 
 ## Build Setup
 
@@ -163,6 +164,7 @@ Counter Header Breadcrumb Footer Modal
 - 登录功能
 - 登出功能
 - 登录判断（mounted，如刷新）
+- vuex购物车商品数量，用户名
 
 ### src/views
 界面模板
@@ -187,6 +189,7 @@ Counter Header Breadcrumb Footer Modal
 - 加入购物车接口
 - 登录全局拦截
 - 全局模态框组件Modal实现（添加购物车提示，父子组件变量双向绑定）
+- vuex购物车商品数量
 
 ### src/views/Cart
 
@@ -197,6 +200,7 @@ Counter Header Breadcrumb Footer Modal
 - 商品选中功能
 - 商品全选功能
 - 实时计算功能（是否全选、选中商品总额）
+- vuex购物车商品数量
 
 ### src/views/Address
 
@@ -364,9 +368,12 @@ app.use(function(req,res,next){
 - 订单创建生成接口(post)：http://localhost:3000/users/payMent
 - 通过订单号获取订单信息接口(get): http://localhost:3000/users/orderDetail
 
+### 18-3-5增加功能
+- 购物车商品数量获取接口(get)：http://localhost:3000/users/getCartCount
+
 
 ## demo学习实例
 ### demo
-es6 axios vue-resource
+es6 axios vue-resource vuex
 ### server
 nodejs

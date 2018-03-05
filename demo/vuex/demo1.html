@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vuex</title>
+  <script src="../../node_modules/vue/dist/vue.js"></script>
+  <script src="../../node_modules/vuex/dist/vuex.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>{{msg}}</h2>
+    <counter></counter>
+    <button v-on:click="add">+</button>
+    <button v-on:click="jump">reset</button>
+    <button v-on:click="action">action</button>
+  </div>
+  <script>
+    const counter={
+      template:`
+      <div>
+        <div>{{username}}</div>
+        <div>{{count}}</div>
+        <div>{{name}}</div>
+      </div>
+      `,
+      computed:{
+        count(){
+          return this.$store.state.count
+        },
+        name(){
+          return this.$store.state.name
+        },
+        username(){
+          return this.$store.getters.username
+        }
+      }
+    };
+    //const store=new Vuex.Store
+    const storeVuex=new Vuex.Store({
+      state:{
+        count:0,
+        name:""
+      },
+      getters:{
+        username(state){
+          return 'Hello,'+state.name;
+        }
+      },
+      mutations:{
+        increment(state){
+          state.count++;
+        },
+        jump(state,num){
+          state.count=num;
+        },
+        updateName(state,username){
+          state.name=username;
+        }
+      },
+      //用于异步，通常不用
+      actions:{
+        jumpAction(context,num){
+          context.commit("jump",num);
+        }
+      }
+    });
+    new Vue({
+      el:"#app",
+      //store,——es6,key和value一样时，可以直接写key,会自动解析为key:key
+      store:storeVuex,
+      data:{
+        msg:"Vuex使用"
+      },
+      components:{
+        counter
+      },
+      methods:{
+        add(){
+          this.$store.commit("increment");
+        },
+        jump(){
+          this.$store.commit("jump",0);
+          this.$store.commit("updateName","lorogy");
+        },
+        action(){
+          this.$store.dispatch("jumpAction",100);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

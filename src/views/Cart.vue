@@ -167,7 +167,7 @@
  import NavFooter from '@/components/Footer.vue'
  import NavBreadcrumb from '@/components/Breadcrumb.vue'
  import Modal from '@/components/Modal.vue'
- import axios from 'axios' 
+ import axios from 'axios'
 
   export default{
     data(){
@@ -233,6 +233,7 @@
           if(res.status=="0"){
             this.modalConfirm=false
             this.init()
+            this.getCartCount()
           }
         })
       },
@@ -255,6 +256,9 @@
           checked:item.checked
         }).then((response)=>{
           let res=response.data
+          if(res.status=="0"){
+            this.getCartCount()
+          }
         })
       },
       //全选切换
@@ -279,6 +283,14 @@
       },
       closeModal(){
         this.modalConfirm=false
+      },
+      getCartCount(){
+        axios.get("/users/getCartCount").then((response)=>{
+          let res=response.data
+          if(res.status=="0"){
+            this.$store.commit("updateCartCount",res.result)
+          }
+        })
       }
     }
   }
