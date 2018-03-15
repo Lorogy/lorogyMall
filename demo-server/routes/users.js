@@ -45,7 +45,8 @@ router.post('/login', function(req, res, next) {
       }else{
         res.json({
           status:"1",
-          msg:"用户名或者密码错误"
+          msg:"用户名或者密码错误",
+          result:''
         })
       }
     }

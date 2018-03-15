@@ -130,6 +130,14 @@
             <a class="btn btn--m btn--red" href="javascript:;" @click="modalConfirm = false">取消</a>
         </div>
       </modal>
+      <modal v-bind:mdShow="isMdShow" @close="isMdShow==false">
+        <p slot="message">
+          地址列表仅剩一项，已无法删除
+        </p>
+        <div slot="btnGroup">
+            <a class="btn btn--m btn--red" href="javascript:;" @click="isMdShow = false">确定</a>
+        </div>
+      </modal>
       <nav-footer></nav-footer>
     </div>
 </template>
@@ -138,13 +146,14 @@
  import NavFooter from '@/components/Footer.vue'
  import NavBreadcrumb from '@/components/Breadcrumb.vue'
  import Modal from '@/components/Modal.vue'
- import axios from 'axios' 
+ import axios from 'axios'
 
   export default{
     data(){
       return{
         addressList:[],
         modalConfirm:false,
+        isMdShow:false,
         selectedAddrId:'',
         addressId:'',
         limit:3,
@@ -196,8 +205,12 @@
         })
       },
       addressDelConfirm(addressId){
-        this.modalConfirm=true
-        this.addressId=addressId
+        if(this.addressList.length>1){
+          this.modalConfirm=true
+          this.addressId=addressId
+        }else{
+          this.isMdShow=true
+        }
       },
       addressDel(){
         axios.post("/users/addressDel",{
