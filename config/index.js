@@ -67,7 +67,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     //静态资源cdn地址，eg：www.baidu.com
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
     //assetsPublicPath: 'http://www.lorogy.com/lorogymail',
 
     /**
@@ -76,7 +76,7 @@ module.exports = {
 
     productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
-    devtool: '#source-map',
+    //devtool: '#source-map',
 
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
