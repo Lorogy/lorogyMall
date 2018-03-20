@@ -67,8 +67,8 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     //静态资源cdn地址，eg：www.baidu.com
-    //assetsPublicPath: '/',
-    assetsPublicPath: 'http://www.lorogy.com/lorogymail',
+    assetsPublicPath: '/',
+    //assetsPublicPath: 'http://www.lorogy.com/lorogymail',
 
     /**
      * Source Maps
