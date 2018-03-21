@@ -11,7 +11,7 @@ Vue.use(Router)
 export default new Router({
   //默认路由模式mode:'hash'有#
   //history无#，主流方式
-  mode:'history',
+  //mode:'history',
   routes: [
     {
       path:'/',
