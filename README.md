@@ -30,6 +30,7 @@ npm run build --report
 ```
 
 ## 项目文件修改内容（前端，客户端）
+vue-cli 生成 `vue init webpack lorogymail`
 ### build/webpack.dev.conf.js
 模拟加载后台数据
 添加：
@@ -227,7 +228,7 @@ Counter Header Breadcrumb Footer Modal
 
 ## demo-server（后端，服务端）
 
-express-generator生成的服务端项目，正常应该是里一个项目（这里为了方便）
+express-generator生成的服务端项目，正常应该是里一个项目（这里为了方便）`express demo-server`
 
 ### 启动命令
 ```
